@@ -1,6 +1,6 @@
 ﻿# Jay Harris's dotfiles for Windows
 
-A collection of PowerShell files for Windows, including common application installation through `Win-Get` and `npm`, and developer-minded Windows configuration defaults.
+A collection of PowerShell files for Windows, including common application installation through `Win-Get` and `npm`, and Windows configuration defaults.
 
 Are you a Mac user? Check out my [dotfiles](https://github.com/jayharris/dotfiles) repository.
 
@@ -8,7 +8,7 @@ Are you a Mac user? Check out my [dotfiles](https://github.com/jayharris/dotfile
 
 ### Using Git and the bootstrap script
 
-You can clone the repository wherever you want. (I like to keep it in `~\Projects\dotfiles-windows`.) The bootstrapper script will copy the files to your PowerShell Profile folder.
+You can clone the repository wherever you want. (I like to keep it in `~\Projects\dotfiles-windows`.) The Bootstrapper script will copy the files to your PowerShell Profile folder.
 
 From PowerShell:
 ```posh
