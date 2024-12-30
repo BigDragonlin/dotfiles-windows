@@ -8,46 +8,50 @@ if (!(Verify-Elevated)) {
    exit
 }
 
-
-# Function to check if a software is installed
+# 定义函数以检查软件是否已安装
 function Check-SoftwareInstalled {
     param (
-        [string]$SoftwareName
+        [string]$SoftwareID
     )
-    # Use winget list to check if the software is already installed
-    $installed = winget list --name $SoftwareName 2>&1 | Out-String
+    $installed = winget list --id $SoftwareID 2>&1 | Out-String
     return $installed -notmatch "No installed package found matching input criteria"
 }
 
-# Install Git
-if (-not (Check-SoftwareInstalled "Git")) {
-    winget install Git.Git --silent --accept-package-agreements --accept-source-agreements --override "/VerySilent /NoRestart /o:PathOption=CmdTools /Components=""icons,assoc,assoc_sh,gitlfs"""
+# 定义需要安装的软件列表
+$softwareList = @(
+    @{ Name = "Visual Studio Community 2022"; ID = "Microsoft.VisualStudio.2022.Community" },
+    # @{ Name = "Cursor"; ID = "Anysphere.Cursor" },
+    @{ Name = "Anki"; ID = "Anki.Anki" },
+    @{ Name = "AutoHotkey"; ID = "AutoHotkey.AutoHotkey" },
+    @{ Name = "Google Chrome"; ID = "Google.Chrome" },
+    # @{ Name = "Docker Desktop"; ID = "Docker.DockerDesktop" },
+    # @{ Name = "DBeaver"; ID = "dbeaver.dbeaver" },
+    @{ Name = "Ditto"; ID = "Ditto.Ditto" },
+    @{ Name = "PowerToys"; ID = "Microsoft.PowerToys" },
+    @{ Name = "Node.js LTS"; ID = "OpenJS.NodeJS.LTS" },
+    @{ Name = "Notepad++"; ID = "Notepad++.Notepad++" },
+    @{ Name = "TortoiseSVN"; ID = "TortoiseSVN.TortoiseSVN" },
+    # @{ Name = "Telegram Desktop"; ID = "Telegram.TelegramDesktop" },
+    @{ Name = "Python 3.12"; ID = "Python.Python.3.12" },
+    @{ Name = "Logitech G HUB"; ID = "Logitech.GHUB" },
+    @{ Name = "Unity Hub"; ID = "Unity.UnityHub" },
+    @{ Name = "网易有道翻译"; ID = "Youdao.YoudaoTranslate" },
+    @{ Name = "百度网盘"; ID = "Baidu.BaiduNetdisk" },
+    @{ Name = "JetBrains Toolbox"; ID = "JetBrains.Toolbox" }
+)
+
+# 遍历安装列表并检查软件是否已安装
+foreach ($software in $softwareList) {
+    if (-not (Check-SoftwareInstalled $software.ID)) {
+        Write-Host "正在安装: $($software.Name)..." -ForegroundColor Yellow
+        winget install --id $software.ID --silent --accept-package-agreements --accept-source-agreements
+    } else {
+        Write-Host "$($software.Name) 已安装，跳过。" -ForegroundColor Green
+    }
 }
 
-# Install Node.js
-if (-not (Check-SoftwareInstalled "Node.js")) {
-    winget install OpenJS.NodeJS --silent --accept-package-agreements --accept-source-agreements
-}
+Write-Host "所有软件安装完成！" -ForegroundColor Cyan
 
-# Install Python
-if (-not (Check-SoftwareInstalled "Python")) {
-    winget install Python.Python.3.12 --silent --accept-package-agreements --accept-source-agreements
-}
-
-# Install Google Chrome
-if (-not (Check-SoftwareInstalled "Google Chrome")) {
-    winget install Google.Chrome --silent --accept-package-agreements --accept-source-agreements
-}
-
-# Install PowerShell
-if (-not (Check-SoftwareInstalled "PowerShell")) {
-    winget install Microsoft.PowerShell --silent --accept-package-agreements --accept-source-agreements
-}
-
-# Install Vim
-if (-not (Check-SoftwareInstalled "Vim")) {
-    winget install Vim.Vim --silent --accept-package-agreements --accept-source-agreements
-}
 
 Refresh-Environment
 
