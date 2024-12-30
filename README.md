@@ -1,21 +1,24 @@
-﻿# Jay Harris's dotfiles for Windows
+﻿### Jay Harris's Windows dotfiles
 
-A collection of PowerShell files for Windows, including common application installation through `Win-Get` and `npm`, and Windows configuration defaults.
+Jay Harris 的 dotfiles 是一组为 Windows 提供的 PowerShell 文件，包括通过 `Win-Get` 和 `npm` 安装常见应用程序以及为开发者配置的 Windows 默认设置。
 
-Are you a Mac user? Check out my [dotfiles](https://github.com/jayharris/dotfiles) repository.
+---
 
-## Installation
+### Installation
 
 ### Using Git and the bootstrap script
 
-You can clone the repository wherever you want. (I like to keep it in `~\Projects\dotfiles-windows`.) The Bootstrapper script will copy the files to your PowerShell Profile folder.
+You can clone the repository wherever you want. (I like to keep it in `~\Projects\dotfiles-windows`.) The bootstrapper script will copy the files to your PowerShell Profile folder.
 
-From PowerShell:
+从 Git 仓库克隆项目后，引导脚本会将文件复制到 PowerShell 配置文件夹中。（我习惯将其保存在 `~\Projects\dotfiles-windows`。）
+
 ```posh
 git clone https://github.com/jayharris/dotfiles-windows.git; cd dotfiles-windows; . .\bootstrap.ps1
 ```
 
 To update your settings, `cd` into your local `dotfiles-windows` repository within PowerShell and then:
+
+若要更新配置，请进入本地的 `dotfiles-windows` 目录并运行以下命令：
 
 ```posh
 . .\bootstrap.ps1
@@ -23,11 +26,15 @@ To update your settings, `cd` into your local `dotfiles-windows` repository with
 
 Note: You must have your execution policy set to unrestricted (or at least in bypass) for this to work: `Set-ExecutionPolicy Unrestricted`.
 
+注意：您必须将 PowerShell 的执行策略设置为不受限制或绕过模式：`Set-ExecutionPolicy Unrestricted`。
+
+---
+
 ### Git-free install
 
-> **Note:** You must have your execution policy set to unrestricted (or at least in bypass) for this to work. To set this, run `Set-ExecutionPolicy Unrestricted` from a PowerShell running as Administrator.
-
 To install these dotfiles from PowerShell without Git:
+
+如果没有安装 Git，也可以使用以下命令从 PowerShell 安装：
 
 ```bash
 iex ((new-object net.webclient).DownloadString('https://raw.github.com/jayharris/dotfiles-windows/master/setup/install.ps1'))
@@ -35,100 +42,89 @@ iex ((new-object net.webclient).DownloadString('https://raw.github.com/jayharris
 
 To update later on, just run that command again.
 
-## Use & Configuration
+稍后要更新，只需再次运行此命令。
+
+---
+
+### Use & Configuration
 
 ### PowerShell Profile
 
-The following commands are executed every time you launch a new
-PowerShell window.
+The following commands are executed every time you launch a new PowerShell window.
 
- - `.\components.ps1` : Load various PowerShell components and modules.
- - `.\functions.ps1` : Configure custom PowerShell functions.
- - `.\aliases.ps1` : Configure alias-based commands.
- - `.\exports.ps1` : Configure environment variables.
- - `.\extra.ps1` : Secrets and secret commands that are not tracked by the Git repository.
+以下命令会在每次启动 PowerShell 窗口时执行：
 
-Also included are default configurations for Git, Mercurial, Ruby, NPM, and vim.
+- `.\components.ps1`: Load various PowerShell components and modules.  
+  加载各种 PowerShell 组件和模块。
+
+- `.\functions.ps1`: Configure custom PowerShell functions.  
+  配置自定义 PowerShell 函数。
+
+- `.\aliases.ps1`: Configure alias-based commands.  
+  配置别名命令。
+
+- `.\exports.ps1`: Configure environment variables.  
+  配置环境变量。
+
+- `.\extra.ps1`: Secrets and secret commands that are not tracked by the Git repository.  
+  包含秘密信息和不被 Git 仓库跟踪的命令。
+
+---
 
 ### Secrets
 
-You may have scripts or commands that you want to execute when loading PowerShell that you do not want committed into your own `dotfiles` repository, such as a place to put tokens or credentials or even your Git commit email address. For such secret commands, use `.\extra.ps1`.
+If you have sensitive information (e.g., API tokens) or custom settings, you can place them in `.\extra.ps1`.
 
-If `.\extra.ps1` exists, it will be sourced along with the other files.
+如果有敏感信息（例如 API 密钥）或自定义设置，可以将它们放入 `.\extra.ps1` 文件。
 
-My `.\extra.ps1` looks something like this:
+---
 
-```posh
-# Hg credentials
-# Not in the repository, to prevent people from accidentally committing under my name
-Set-Environment "EMAIL" "Jay Harris <jay@aranasoft.com>"
+### Sensible Windows Defaults
 
-# Git credentials
-# Not in the repository, to prevent people from accidentally committing under my name
-Set-Environment "GIT_AUTHOR_NAME" "Jay Harris","User"
-Set-Environment "GIT_COMMITTER_NAME" $env:GIT_AUTHOR_NAME
-git config --global user.name $env:GIT_AUTHOR_NAME
-Set-Environment "GIT_AUTHOR_EMAIL" "jay@aranasoft.com"
-Set-Environment "GIT_COMMITTER_EMAIL" $env:GIT_AUTHOR_EMAIL
-git config --global user.email $env:GIT_AUTHOR_EMAIL
-```
+When setting up a new Windows PC, you may want to apply default configurations, such as showing hidden files or uninstalling unwanted applications.
 
-Extras is designed to augment the existing settings and configuration. You could also use `./extra.ps1` to override settings, functions and aliases from my dotfiles repository, but it is probably better to [fork this repository](#forking-your-own-version).
-
-### Sensible Windows defaults
-
-When setting up a new Windows PC, you may want to set some Windows defaults and features, such as showing hidden files in Windows Explorer, configuring privacy settings, installing IIS, and uninstalling Candy Crush. You are encouraged to browse through the file to understand all of the modifications and to modify these settings based on your own preferences.
+在配置新的 Windows PC 时，可以应用默认设置，例如显示隐藏文件或卸载不需要的应用程序。
 
 ```posh
 .\windows.ps1
 ```
 
-This script will also set your machine name, so you may want to modify this file before executing.
-```posh
-(Get-WmiObject Win32_ComputerSystem).Rename("MyMachineName") | Out-Null
-```
+---
 
-### Dependencies: Tools, Utilities, and Packages
+### Dependencies
 
-Setting up a new Windows machine often requires installation of common packages, utilities, and dependencies. These could include node.js packages via [NPM](https://www.npmjs.org), Win-Get packages, Windows Features and Tools, and Visual Studio Extensions.
+You can use `deps.ps1` to install common tools, utilities, and packages required for development.
 
-```posh
-.\deps.ps1
-```
+可以使用 `deps.ps1` 安装开发所需的常用工具、实用程序和软件包。
 
-## Customization
+---
 
-## Forking your own version
+### Customization
 
-These scripts are for my preferences; your preferences may be different.
+These scripts are designed based on the author's preferences. You can fork the repository to customize it according to your own needs.
 
-This repository is built around how I use Windows, which is predominantly in a VM hosted on macOS. As such, things like VNC, FileZilla, or Skype are not installed, as they are available to me on the macOS side, installed by my [OS X dotfiles](https://github.com/jayharris/dotfiles). If you are using Windows as your primary OS, you may want a different configuration that reflects that, and I recommend you [fork this repository](https://github.com/jayharris/dotfiles-windows/fork).
+这些脚本基于作者的偏好设计。您可以分叉仓库并根据自己的需求进行定制。
 
-If you do fork for your own custom configuration, you will need to touch a few files to reference your own repository, instead of mine.
+---
 
-Within `/setup/install.ps1`, modify the Repository variables.
-```posh
-$account = "jayharris"
-$repo    = "dotfiles-windows"
-$branch  = "master"
-```
+### Feedback
 
-Finally, be sure to reference your own repository in the git-free installation command.
-```bash
-iex ((new-object net.webclient).DownloadString('https://raw.github.com/$account/$repo/$branch/setup/install.ps1'))
-```
+Suggestions or improvements are welcome through the Issues page of the repository.
 
-## Feedback
+欢迎通过仓库的 Issues 页面提出建议或改进。
 
-Suggestions/improvements are
-[welcome and encouraged](https://github.com/jayharris/dotfiles-windows/issues)!
+---
 
-## Author
+### Author
 
-| [![twitter/jayharris](http://gravatar.com/avatar/1318668b99b2d5a3900f3f7758763a69?s=70)](http://twitter.com/jayharris "Follow @jayharris on Twitter") |
-|---|
-| [Jay Harris](http://twitter.com/jayharris/) |
+| [![twitter/jayharris](http://gravatar.com/avatar/1318668b99b2d5a3900f3f7758763a69?s=70)](http://twitter.com/jayharris "Follow @jayharris on Twitter") |  
+|---|  
+| [Jay Harris](http://twitter.com/jayharris/) |  
 
-## Thanks to…
+---
 
-* @[Mathias Bynens](http://mathiasbynens.be/) for his [OS X dotfiles](http://mths.be/dotfiles), which this repository is modeled after.
+### Thanks to…
+
+Special thanks to @[Mathias Bynens](http://mathiasbynens.be/) for his macOS dotfiles, which inspired this repository.
+
+特别感谢 @[Mathias Bynens](http://mathiasbynens.be/) 的 macOS dotfiles 项目，为本仓库提供了灵感。
