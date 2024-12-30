@@ -9,15 +9,21 @@ if (!(Verify-Elevated)) {
 }
 
 # system and cli
+# install git
 winget install Git.Git                                   --silent --accept-package-agreements --accept-source-agreements --override "/VerySilent /NoRestart /o:PathOption=CmdTools /Components=""icons,assoc,assoc_sh,gitlfs"""
+
+# 安装nodejs
 winget install OpenJS.NodeJS                             --silent --accept-package-agreements --accept-source-agreements
 winget install Python.Python.3.12                        --silent --accept-package-agreements --accept-source-agreements
 
 # browsers
+# 安装chrome
 winget install Google.Chrome                             --silent --accept-package-agreements --accept-source-agreements
 
 # dev tools and frameworks
+# 安装poweshell
 winget install Microsoft.PowerShell                      --silent --accept-package-agreements --accept-source-agreements
+# 安装vim
 winget install Vim.Vim                                   --silent --accept-package-agreements --accept-source-agreements
 
 Refresh-Environment
